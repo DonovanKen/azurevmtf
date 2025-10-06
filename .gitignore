@@ -1,0 +1,13 @@
+# Terraform artefacts (ne jamais versionner)
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+*.tfvars
+*.plan
+tfplan
+
+# Utiles, à garder
+!.terraform.lock.hcl
+terraform.tfvars
+terraform.tfvars
