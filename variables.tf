@@ -115,9 +115,9 @@ variable "vm_size_worker" {
 }
 
 variable "vm_size_ansible" {
-  description = "VM size for ansible host (2 GiB)"
+  description = "VM size for ansible host (4 GiB)"
   type        = string
-  default     = "Standard_B1ms"
+  default     = "Standard_B2s"
 }
 
 
