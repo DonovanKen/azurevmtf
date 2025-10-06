@@ -12,7 +12,10 @@ pipeline {
     string(name: 'NSG_RULES_JSON', defaultValue: '[{"name":"ssh","priority":100,"direction":"Inbound","access":"Allow","protocol":"Tcp","source_port_range":"*","destination_port_range":"22","source_address_prefix":"*","destination_address_prefix":"*"},{"name":"api-6443","priority":110,"direction":"Inbound","access":"Allow","protocol":"Tcp","source_port_range":"*","destination_port_range":"6443","source_address_prefix":"*","destination_address_prefix":"*"},{"name":"kubelet-10250","priority":120,"direction":"Inbound","access":"Allow","protocol":"Tcp","source_port_range":"*","destination_port_range":"10250","source_address_prefix":"*","destination_address_prefix":"*"},{"name":"nodeport-30000-32767","priority":130,"direction":"Inbound","access":"Allow","protocol":"Tcp","source_port_range":"*","destination_port_range":"30000-32767","source_address_prefix":"*","destination_address_prefix":"*"}]')
   }
 
-  environment { TF_IN_AUTOMATION = 'true' }
+  environment {
+    TF_IN_AUTOMATION = 'true'
+    TF_INPUT         = '0'
+  }
 
   stages {
     stage('Checkout') {
@@ -79,7 +82,7 @@ pipeline {
                 export TF_VAR_client_id="$CID"
                 export TF_VAR_client_secret="$CSEC"
                 export TF_VAR_ssh_public_key="$PUBKEY"
-                terraform plan -out=tfplan
+                terraform plan -input=false -out=tfplan
               '''
             }
           }
@@ -113,7 +116,7 @@ pipeline {
                 export TF_VAR_client_id="$CID"
                 export TF_VAR_client_secret="$CSEC"
                 export TF_VAR_ssh_public_key="$PUBKEY"
-                ([ -f tfplan ] && terraform apply -auto-approve tfplan) || terraform apply -auto-approve
+                ([ -f tfplan ] && terraform apply -input=false -auto-approve tfplan) || terraform apply -input=false -auto-approve
               '''
             }
           }
