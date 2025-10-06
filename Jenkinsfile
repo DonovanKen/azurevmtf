@@ -1,6 +1,6 @@
 pipeline {
   agent any
-  options { timestamps(); ansiColor('xterm') }
+  options { timestamps() }
 
   parameters {
     string(name: 'TF_DIR', defaultValue: '.', description: 'Chemin vers le code Terraform')
@@ -28,13 +28,10 @@ pipeline {
           ]) {
             sh '''
               set -e
-              # Secrets Azure → variables Terraform
               export TF_VAR_subscription_id="$SUB"
               export TF_VAR_tenant_id="$TEN"
               export TF_VAR_client_id="$CID"
               export TF_VAR_client_secret="$CSEC"
-
-              # Clé publique SSH pour les VMs
               export TF_VAR_ssh_public_key="$PUBKEY"
 
               terraform version
@@ -78,7 +75,5 @@ pipeline {
       archiveArtifacts artifacts: 'tfplan', onlyIfSuccessful: true
       cleanWs()
     }
-    success { echo '✅ Terraform OK (secrets + clé publique gérés par Jenkins, aucun .tfvars)' }
-    failure { echo '❌ Échec Terraform — voir les logs' }
   }
 }
