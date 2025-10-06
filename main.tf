@@ -136,7 +136,7 @@ resource "local_file" "inventory" {
     ansible_name   = var.ansible_name
     master_name    = var.master_name
     ips = {
-      for n, _ in local.nodes : n => data.azurerm_public_ip.pip_data[n].ip_address
+      for n, _ in local.nodes : n => try(data.azurerm_public_ip.pip_data[n].ip_address, null)
     }
   })
 }
