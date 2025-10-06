@@ -39,7 +39,7 @@ variable "resource_group_names" {
 variable "location" {
   description = "Azure region"
   type        = string
-  default     = "canadacentral"
+  default     = "eastus" # Changed to East US
 }
 
 # Tags for resources
@@ -111,7 +111,7 @@ variable "vm_size_master" {
 variable "vm_size_worker" {
   description = "VM size for workers (2 GiB)"
   type        = string
-  default     = "Standard_B1ms"
+  default     = "Standard_B1ms"  # Changed to smaller VM size (1 core)
 }
 
 variable "vm_size_ansible" {
