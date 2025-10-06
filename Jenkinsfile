@@ -56,36 +56,36 @@ pipeline {
       }
     }
 
-    stage('Terraform Destroy (first)') {
-      steps {
-        dir(params.TF_DIR) {
-          withCredentials([
-            string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'SUB'),
-            string(credentialsId: 'ARM_TENANT_ID',       variable: 'TEN'),
-            string(credentialsId: 'ARM_CLIENT_ID',       variable: 'CID'),
-            string(credentialsId: 'ARM_CLIENT_SECRET',   variable: 'CSEC'),
-            string(credentialsId: 'SSH_PUBLIC_KEY',      variable: 'PUBKEY')
-          ]) {
-            sh '''
-              set -e
-              export TF_VAR_subscription_id="$SUB"
-              export TF_VAR_tenant_id="$TEN"
-              export TF_VAR_client_id="$CID"
-              export TF_VAR_client_secret="$CSEC"
-              export TF_VAR_ssh_public_key="$PUBKEY"
+    // stage('Terraform Destroy (first)') {
+    //   steps {
+    //     dir(params.TF_DIR) {
+    //       withCredentials([
+    //         string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'SUB'),
+    //         string(credentialsId: 'ARM_TENANT_ID',       variable: 'TEN'),
+    //         string(credentialsId: 'ARM_CLIENT_ID',       variable: 'CID'),
+    //         string(credentialsId: 'ARM_CLIENT_SECRET',   variable: 'CSEC'),
+    //         string(credentialsId: 'SSH_PUBLIC_KEY',      variable: 'PUBKEY')
+    //       ]) {
+    //         sh '''
+    //           set -e
+    //           export TF_VAR_subscription_id="$SUB"
+    //           export TF_VAR_tenant_id="$TEN"
+    //           export TF_VAR_client_id="$CID"
+    //           export TF_VAR_client_secret="$CSEC"
+    //           export TF_VAR_ssh_public_key="$PUBKEY"
 
-              echo "Checking Terraform state…"
-              if terraform state list >/dev/null 2>&1; then
-                echo "State found → running terraform destroy"
-                terraform destroy -input=false -auto-approve
-              else
-                echo "No local state found → nothing to destroy (previous run probably cleaned the workspace)"
-              fi
-            '''
-          }
-        }
-      }
-    }
+    //           echo "Checking Terraform state…"
+    //           if terraform state list >/dev/null 2>&1; then
+    //             echo "State found → running terraform destroy"
+    //             terraform destroy -input=false -auto-approve
+    //           else
+    //             echo "No local state found → nothing to destroy (previous run probably cleaned the workspace)"
+    //           fi
+    //         '''
+    //       }
+    //     }
+    //   }
+    // }
 
     stage('Terraform Plan') {
       steps {
