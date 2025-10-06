@@ -7,9 +7,9 @@ locals {
   }
 
   nodes = merge(
-    { (var.ansible_name) = { size = var.vm_size_ansible } },
-    { (var.master_name)  = { size = var.vm_size_master  } },
-    { for w in var.worker_names : w => { size = var.vm_size_worker } }
+    { (var.ansible_name) = { size = var.vm_size_ansible, public_ip = false } },
+    { (var.master_name)  = { size = var.vm_size_master,  public_ip = false } },
+    { for w in var.worker_names : w => { size = var.vm_size_worker, public_ip = (w == "client1" || w == "client2") } }
   )
 }
 
@@ -17,13 +17,6 @@ locals {
 resource "azurerm_resource_group" "rg" {
   name     = var.resource_group_name
   location = var.location
-  tags     = var.rtags
-}
-
-resource "azurerm_resource_group" "rg_extra" {
-  for_each = var.resource_group_names
-  name     = each.key
-  location = each.value.location
   tags     = var.rtags
 }
 
@@ -72,7 +65,7 @@ resource "azurerm_subnet_network_security_group_association" "sg_assoc" {
 
 # Public IPs, NICs, VMs
 resource "azurerm_public_ip" "pip" {
-  for_each            = local.nodes
+  for_each            = { for k, v in local.nodes : k => v if v.public_ip }
   name                = "pip-${each.key}"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
@@ -91,7 +84,7 @@ resource "azurerm_network_interface" "nic" {
     name                          = "ipconfig1"
     subnet_id                     = azurerm_subnet.subnet.id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.pip[each.key].id
+    public_ip_address_id          = each.value.public_ip ? azurerm_public_ip.pip[each.key].id : null
   }
 
   tags = var.rtags
@@ -131,7 +124,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
 
 # Inventory Ansible (généré en local — pas de secrets)
 data "azurerm_public_ip" "pip_data" {
-  for_each            = local.nodes
+  for_each            = { for k, v in local.nodes : k => v if v.public_ip }
   name                = azurerm_public_ip.pip[each.key].name
   resource_group_name = azurerm_resource_group.rg.name
 }
