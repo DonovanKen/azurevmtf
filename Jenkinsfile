@@ -19,8 +19,7 @@ pipeline {
 
     stages {
         stage('Checkout') {
-            steps { checkout scm } // Keep state between runs
-        }
+            steps { checkout scm }
 
         stage('Terraform Init') {
             steps {
