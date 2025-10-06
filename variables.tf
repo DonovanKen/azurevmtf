@@ -1,6 +1,4 @@
-############################################
-# Auth (remplies par Jenkins via TF_VAR_*)
-############################################
+
 variable "client_id" {
   description = "Service Principal Client ID"
   type        = string
@@ -22,9 +20,7 @@ variable "subscription_id" {
   type        = string
 }
 
-############################################
-# Ressources globales
-############################################
+
 variable "resource_group_name" {
   description = "Resource Group name"
   type        = string
@@ -50,9 +46,8 @@ variable "rtags" {
   default     = { project = "k8s-lab", owner = "terraform" }
 }
 
-############################################
-# Réseau
-############################################
+
+
 variable "vn_name" {
   description = "Virtual Network name"
   type        = string
@@ -88,9 +83,8 @@ variable "nsg_rules" {
   }))
 }
 
-############################################
+
 # SSH & VM sizing
-############################################
 variable "admin_username" {
   description = "Linux admin username"
   type        = string
@@ -120,9 +114,8 @@ variable "vm_size_ansible" {
   default     = "Standard_B1ms"
 }
 
-############################################
-# VM names
-############################################
+
+# VM
 variable "ansible_name" {
   description = "Ansible VM name"
   type        = string

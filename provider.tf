@@ -14,7 +14,6 @@ terraform {
 
 provider "azurerm" {
   features {}
-  # Auth via variables (valeurs injectées par Jenkins en TF_VAR_*)
   client_id       = var.client_id
   client_secret   = var.client_secret
   tenant_id       = var.tenant_id
