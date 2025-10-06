@@ -159,8 +159,7 @@ pipeline {
   post {
     always {
       archiveArtifacts artifacts: 'tfplan', onlyIfSuccessful: true
-      // DO NOT clean workspace, or you'll lose state and destroy will skip next time
-      // cleanWs()
+    
     }
   }
 }
