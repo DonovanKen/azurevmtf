@@ -121,22 +121,3 @@ resource "azurerm_linux_virtual_machine" "vm" {
 
   tags = merge(var.rtags, { role = each.key })
 }
-
-# Inventory Ansible (généré en local — pas de secrets)
-data "azurerm_public_ip" "pip_data" {
-  for_each            = { for k, v in local.nodes : k => v if v.public_ip }
-  name                = azurerm_public_ip.pip[each.key].name
-  resource_group_name = azurerm_resource_group.rg.name
-}
-
-resource "local_file" "inventory" {
-  filename = "${path.module}/inventory.ini"
-  content  = templatefile("${path.module}/inventory.tpl", {
-    admin_username = var.admin_username
-    ansible_name   = var.ansible_name
-    master_name    = var.master_name
-    ips = {
-      for n, _ in local.nodes : n => try(data.azurerm_public_ip.pip_data[n].ip_address, null)
-    }
-  })
-}
