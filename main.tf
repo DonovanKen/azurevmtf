@@ -63,7 +63,7 @@ resource "azurerm_subnet_network_security_group_association" "sg_assoc" {
   network_security_group_id = azurerm_network_security_group.nsg.id
 }
 
-# Public IPs, NICs, VMs
+# Public IPs
 resource "azurerm_public_ip" "pip" {
   for_each            = { for k, v in local.nodes : k => v if v.public_ip }
   name                = "pip-${each.key}"
