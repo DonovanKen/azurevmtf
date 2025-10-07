@@ -13,14 +13,14 @@ locals {
   )
 }
 
-# Resource Group
+# Resource Group(s)
 resource "azurerm_resource_group" "rg" {
   name     = var.resource_group_name
   location = var.location
   tags     = var.rtags
 }
 
-# Virtual Network
+# Networking
 resource "azurerm_virtual_network" "vnet" {
   name                = var.vn_name
   address_space       = var.vn_address
@@ -29,7 +29,6 @@ resource "azurerm_virtual_network" "vnet" {
   tags                = var.rtags
 }
 
-# Subnet
 resource "azurerm_subnet" "subnet" {
   name                 = var.subnet_name
   resource_group_name  = azurerm_resource_group.rg.name
@@ -37,7 +36,6 @@ resource "azurerm_subnet" "subnet" {
   address_prefixes     = [var.subnet_address]
 }
 
-# Network Security Group
 resource "azurerm_network_security_group" "nsg" {
   name                = "nsg-k8s"
   location            = azurerm_resource_group.rg.location
@@ -60,7 +58,6 @@ resource "azurerm_network_security_group" "nsg" {
   }
 }
 
-# NSG Association
 resource "azurerm_subnet_network_security_group_association" "sg_assoc" {
   subnet_id                 = azurerm_subnet.subnet.id
   network_security_group_id = azurerm_network_security_group.nsg.id
@@ -77,7 +74,6 @@ resource "azurerm_public_ip" "pip" {
   tags                = var.rtags
 }
 
-# Network Interfaces
 resource "azurerm_network_interface" "nic" {
   for_each            = local.nodes
   name                = "nic-${each.key}"
@@ -94,14 +90,13 @@ resource "azurerm_network_interface" "nic" {
   tags = var.rtags
 }
 
-# Linux Virtual Machines
 resource "azurerm_linux_virtual_machine" "vm" {
   for_each              = local.nodes
   name                  = each.key
   computer_name         = each.key
   resource_group_name   = azurerm_resource_group.rg.name
   location              = azurerm_resource_group.rg.location
-  size                  = each.value.size
+  size                  = each.value.size  # Ensure this is within your quota limits
   admin_username        = var.admin_username
   network_interface_ids = [azurerm_network_interface.nic[each.key].id]
 
