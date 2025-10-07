@@ -2,25 +2,26 @@ pipeline {
     agent any
 
     parameters {
-        string(name: 'TF_DIR',        defaultValue: '.',             description: 'Path to Terraform code')
-        string(name: 'LOCATION',      defaultValue: 'canadacentral',         description: 'Azure region')
-        string(name: 'RG_NAME',       defaultValue: 'rg-k8s-lab',    description: 'Resource Group')
-        string(name: 'VN_NAME',       defaultValue: 'vnet-k8s',      description: 'VNet name')
-        string(name: 'VN_CIDR',       defaultValue: '10.0.0.0/16',   description: 'VNet CIDR')
-        string(name: 'SUBNET_NAME',   defaultValue: 'snet-k8s',      description: 'Subnet name')
-        string(name: 'SUBNET_CIDR',   defaultValue: '10.0.1.0/24',   description: 'Subnet CIDR')
-        string(name: 'NSG_RULES_JSON', defaultValue: '[{"name":"ssh","priority":100,"direction":"Inbound","access":"Allow","protocol":"Tcp","source_port_range":"*","destination_port_range":"22","source_address_prefix":"*","destination_address_prefix":"*"},{"name":"api-6443","priority":110,"direction":"Inbound","access":"Allow","protocol":"Tcp","source_port_range":"*","destination_port_range":"6443","source_address_prefix":"*","destination_address_prefix":"*"},{"name":"kubelet-10250","priority":120,"direction":"Inbound","access":"Allow","protocol":"Tcp","source_port_range":"*","destination_port_range":"10250","source_address_prefix":"*","destination_address_prefix":"*"},{"name":"nodeport-30000-32767","priority":130,"direction":"Inbound","access":"Allow","protocol":"Tcp","source_port_range":"*","destination_port_range":"30000-32767","source_address_prefix":"*","destination_address_prefix":"*"}]')
+        string(name: 'TF_DIR', defaultValue: '.', description: 'Path to Terraform code')
+        string(name: 'LOCATION', defaultValue: 'East US', description: 'Azure region')
+        string(name: 'RG_NAME', defaultValue: 'rg-k8s-lab', description: 'Resource Group')
+        string(name: 'VN_NAME', defaultValue: 'vnet-k8s', description: 'VNet name')
+        string(name: 'VN_CIDR', defaultValue: '10.0.0.0/16', description: 'VNet CIDR')
+        string(name: 'SUBNET_NAME', defaultValue: 'snet-k8s', description: 'Subnet name')
+        string(name: 'SUBNET_CIDR', defaultValue: '10.0.1.0/24', description: 'Subnet CIDR')
+        string(name: 'NSG_RULES_JSON', defaultValue: '[{"name":"ssh","priority":100,"direction":"Inbound","access":"Allow","protocol":"Tcp","source_port_range":"*","destination_port_range":"22","source_address_prefix":"*","destination_address_prefix":"*"}]')
     }
 
     environment {
         TF_IN_AUTOMATION = 'true'
-        TF_INPUT         = '0'
+        TF_INPUT = '0'
     }
 
     stages {
         stage('Checkout') {
             steps { checkout scm }
         }
+
         stage('Terraform Init') {
             steps {
                 dir(params.TF_DIR) {
@@ -35,10 +36,10 @@ pipeline {
                     ]) {
                         withCredentials([
                             string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'SUB'),
-                            string(credentialsId: 'ARM_TENANT_ID',       variable: 'TEN'),
-                            string(credentialsId: 'ARM_CLIENT_ID',       variable: 'CID'),
-                            string(credentialsId: 'ARM_CLIENT_SECRET',   variable: 'CSEC'),
-                            string(credentialsId: 'SSH_PUBLIC_KEY',      variable: 'PUBKEY')
+                            string(credentialsId: 'ARM_TENANT_ID', variable: 'TEN'),
+                            string(credentialsId: 'ARM_CLIENT_ID', variable: 'CID'),
+                            string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'CSEC'),
+                            string(credentialsId: 'SSH_PUBLIC_KEY', variable: 'PUBKEY')
                         ]) {
                             sh '''
                                 set -e
@@ -69,10 +70,10 @@ pipeline {
                     ]) {
                         withCredentials([
                             string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'SUB'),
-                            string(credentialsId: 'ARM_TENANT_ID',       variable: 'TEN'),
-                            string(credentialsId: 'ARM_CLIENT_ID',       variable: 'CID'),
-                            string(credentialsId: 'ARM_CLIENT_SECRET',   variable: 'CSEC'),
-                            string(credentialsId: 'SSH_PUBLIC_KEY',      variable: 'PUBKEY')
+                            string(credentialsId: 'ARM_TENANT_ID', variable: 'TEN'),
+                            string(credentialsId: 'ARM_CLIENT_ID', variable: 'CID'),
+                            string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'CSEC'),
+                            string(credentialsId: 'SSH_PUBLIC_KEY', variable: 'PUBKEY')
                         ]) {
                             sh '''
                                 set -e
@@ -103,10 +104,10 @@ pipeline {
                     ]) {
                         withCredentials([
                             string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'SUB'),
-                            string(credentialsId: 'ARM_TENANT_ID',       variable: 'TEN'),
-                            string(credentialsId: 'ARM_CLIENT_ID',       variable: 'CID'),
-                            string(credentialsId: 'ARM_CLIENT_SECRET',   variable: 'CSEC'),
-                            string(credentialsId: 'SSH_PUBLIC_KEY',      variable: 'PUBKEY')
+                            string(credentialsId: 'ARM_TENANT_ID', variable: 'TEN'),
+                            string(credentialsId: 'ARM_CLIENT_ID', variable: 'CID'),
+                            string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'CSEC'),
+                            string(credentialsId: 'SSH_PUBLIC_KEY', variable: 'PUBKEY')
                         ]) {
                             sh '''
                                 set -e
@@ -129,5 +130,4 @@ pipeline {
             archiveArtifacts artifacts: 'tfplan', onlyIfSuccessful: true
         }
     }
- }
-
+}
