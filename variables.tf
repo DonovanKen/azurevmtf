@@ -1,4 +1,3 @@
-
 variable "client_id" {
   description = "Service Principal Client ID"
   type        = string
@@ -20,28 +19,16 @@ variable "subscription_id" {
   type        = string
 }
 
-
 variable "resource_group_name" {
   description = "Resource Group name"
   type        = string
 }
 
-
-# variable "resource_group_names" {
-#   description = "Optional extra RGs (name -> location)"
-#   type = map(object({
-#     location = string
-#   }))
-#   default = {}
-# }
-
-
 variable "location" {
   description = "Azure region"
   type        = string
-  default     = "East US" 
+  default     = "East US"
 }
-
 
 variable "rtags" {
   description = "Tags"
@@ -49,17 +36,15 @@ variable "rtags" {
   default     = { project = "k8s-lab", owner = "terraform" }
 }
 
-
 variable "vn_name" {
   description = "Virtual Network name"
   type        = string
 }
 
-
 variable "vn_address" {
   description = "VNet CIDRs"
   type        = list(string)
-  default     = ["10.0.0.0/16"] 
+  default     = ["10.0.0.0/16"]
 }
 
 variable "subnet_name" {
@@ -67,13 +52,11 @@ variable "subnet_name" {
   type        = string
 }
 
-
 variable "subnet_address" {
   description = "Subnet CIDR"
   type        = string
-  default     = "10.0.1.0/24" 
+  default     = "10.0.1.0/24"
 }
-
 
 variable "nsg_rules" {
   description = "NSG inbound rules"
@@ -89,7 +72,6 @@ variable "nsg_rules" {
     destination_address_prefix = string
   }))
 }
-
 
 variable "admin_username" {
   description = "Linux admin username"
@@ -111,7 +93,7 @@ variable "vm_size_master" {
 variable "vm_size_worker" {
   description = "VM size for workers (2 GiB)"
   type        = string
-  default     = "Standard_B1ms"  
+  default     = "Standard_B1ms"
 }
 
 variable "vm_size_ansible" {
@@ -119,7 +101,6 @@ variable "vm_size_ansible" {
   type        = string
   default     = "Standard_B2s"
 }
-
 
 variable "ansible_name" {
   description = "Ansible VM name"
@@ -136,5 +117,5 @@ variable "master_name" {
 variable "worker_names" {
   description = "K8s worker names"
   type        = list(string)
-  default     = ["client1", "client2"]  
+  default     = ["client1", "client2"]
 }
