@@ -103,9 +103,9 @@ variable "ssh_public_key" {
 }
 
 variable "vm_size_master" {
-  description = "VM size for master (4 GiB)"
+  description = "VM size for master (3.5 GiB)"
   type        = string
-  default     = "Standard_F2"
+  default     = "Standard_D1_v2"
 }
 
 variable "vm_size_worker" {
@@ -115,9 +115,9 @@ variable "vm_size_worker" {
 }
 
 variable "vm_size_ansible" {
-  description = "VM size for ansible host (4 GiB)"
+  description = "VM size for ansible host (3.5 GiB)"
   type        = string
-  default     = "Standard_F2"
+  default     = "Standard_D1_v2"
 }
 
 
