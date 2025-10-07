@@ -3,7 +3,7 @@ pipeline {
 
     parameters {
         string(name: 'TF_DIR',        defaultValue: '.',             description: 'Path to Terraform code')
-        string(name: 'LOCATION',      defaultValue: 'West Europe',         description: 'Azure region')
+        string(name: 'LOCATION',      defaultValue: 'canadaeast',         description: 'Azure region')
         string(name: 'RG_NAME',       defaultValue: 'rg-k8s-lab',    description: 'Resource Group')
         string(name: 'VN_NAME',       defaultValue: 'vnet-k8s',      description: 'VNet name')
         string(name: 'VN_CIDR',       defaultValue: '10.0.0.0/16',   description: 'VNet CIDR')
