@@ -96,7 +96,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
   computer_name         = each.key
   resource_group_name   = azurerm_resource_group.rg.name
   location              = azurerm_resource_group.rg.location
-  size                  = each.value.size  # Ensure this is within your quota limits
+  size                  = each.value.size  # The size will be set based on the updated variable
   admin_username        = var.admin_username
   network_interface_ids = [azurerm_network_interface.nic[each.key].id]
 
