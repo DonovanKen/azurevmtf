@@ -27,19 +27,19 @@ variable "resource_group_name" {
 }
 
 
-variable "resource_group_names" {
-  description = "Optional extra RGs (name -> location)"
-  type = map(object({
-    location = string
-  }))
-  default = {}
-}
+# variable "resource_group_names" {
+#   description = "Optional extra RGs (name -> location)"
+#   type = map(object({
+#     location = string
+#   }))
+#   default = {}
+# }
 
 
 variable "location" {
   description = "Azure region"
   type        = string
-  default     = "westeurope" 
+  default     = "West Europe" 
 }
 
 
