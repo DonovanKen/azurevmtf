@@ -19,18 +19,7 @@ pipeline {
 
     stages {
         stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
-        stage('Clean Terraform State') {
-            steps {
-                script {
-                    // Clean up Terraform state if needed
-                    deleteDir()  // Deletes the workspace directory, including state files
-                }
-            }
+            steps { checkout scm }
         }
 
         stage('Terraform Init') {
@@ -59,22 +48,6 @@ pipeline {
                                 export TF_VAR_client_id="$CID"
                                 export TF_VAR_client_secret="$CSEC"
                                 export TF_VAR_ssh_public_key="$PUBKEY"
-
-                                # Check if subnet exists, and import if necessary
-                                SUBNET_EXISTS=$(az network vnet subnet show \
-                                    --resource-group ${TF_VAR_resource_group_name} \
-                                    --vnet-name ${TF_VAR_vn_name} \
-                                    --name ${TF_VAR_subnet_name} \
-                                    --query "id" --output tsv)
-
-                                if [ -z "$SUBNET_EXISTS" ]; then
-                                    echo "Subnet doesn't exist. Proceeding with Terraform creation."
-                                else
-                                    echo "Subnet exists. Importing into Terraform state."
-                                    terraform import azurerm_subnet.subnet \
-                                        /subscriptions/$SUB/resourceGroups/$TF_VAR_resource_group_name/providers/Microsoft.Network/virtualNetworks/$TF_VAR_vn_name/subnets/$TF_VAR_subnet_name
-                                fi
-
                                 terraform init -input=false
                             '''
                         }
