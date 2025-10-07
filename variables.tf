@@ -39,7 +39,7 @@ variable "resource_group_name" {
 variable "location" {
   description = "Azure region"
   type        = string
-  default     = "canadaeast" 
+  default     = "Canada East" 
 }
 
 
