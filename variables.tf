@@ -27,7 +27,7 @@ variable "resource_group_name" {
 variable "location" {
   description = "Azure region"
   type        = string
-  default     = "North Europe"   # Updated region to North Europe (Ireland)
+  default     = "canadaeast"   # Updated region to North Europe (Ireland)
 }
 
 variable "rtags" {
@@ -87,19 +87,19 @@ variable "ssh_public_key" {
 variable "vm_size_master" {
   description = "VM size for master (4 GiB)"
   type        = string
-  default     = "Standard_B2s"
+  default     = "Standard_B2ms"
 }
 
 variable "vm_size_worker" {
   description = "VM size for workers (2 GiB)"
   type        = string
-  default     = "Standard_B2s"
+  default     = "Standard_B1ms"
 }
 
 variable "vm_size_ansible" {
   description = "VM size for ansible host (4 GiB)"
   type        = string
-  default     = "Standard_B2s"
+  default     = "Standard_B2sStandard_B2ms"
 }
 
 variable "ansible_name" {
