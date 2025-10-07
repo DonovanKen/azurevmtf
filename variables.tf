@@ -27,7 +27,7 @@ variable "resource_group_name" {
 variable "location" {
   description = "Azure region"
   type        = string
-  default     = "West US"
+  default     = "North Europe"   # Updated region to North Europe (Ireland)
 }
 
 variable "rtags" {
@@ -44,7 +44,7 @@ variable "vn_name" {
 variable "vn_address" {
   description = "VNet CIDRs"
   type        = list(string)
-  default     = ["10.0.0.0/16"]
+  default     = ["10.3.0.0/16"]   # Updated CIDR for North Europe region
 }
 
 variable "subnet_name" {
@@ -55,7 +55,7 @@ variable "subnet_name" {
 variable "subnet_address" {
   description = "Subnet CIDR"
   type        = string
-  default     = "10.0.1.0/24"
+  default     = "10.3.1.0/24"   # Updated to match the region's CIDR
 }
 
 variable "nsg_rules" {
